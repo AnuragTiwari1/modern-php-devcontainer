@@ -1,8 +1,9 @@
 # Use the official PHP image with Apache
-FROM php:7.1-apache
+FROM php:7.3-apache
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update
+RUN apt-get install -y \
   git \
   curl \
   zip \
@@ -12,9 +13,8 @@ RUN apt-get update && apt-get install -y \
   libjpeg-dev \
   libfreetype6-dev \
   libonig-dev \
-  libssl-dev \
-  && docker-php-ext-configure gd --with-freetype --with-jpeg \
-  && docker-php-ext-install pdo_mysql mbstring zip gd
+  libssl-dev
+RUN docker-php-ext-install pdo_mysql mbstring zip gd
 
 # Install Bun (JavaScript/TypeScript runtime)
 RUN curl -fsSL https://bun.sh/install | bash

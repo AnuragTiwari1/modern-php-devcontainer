@@ -1,5 +1,6 @@
 # Use the official PHP image with Apache
 FROM php:7.3-apache
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 # Install system dependencies
 RUN apt-get update
@@ -15,6 +16,7 @@ RUN apt-get install -y \
   libonig-dev \
   libssl-dev
 RUN docker-php-ext-install pdo_mysql mbstring zip gd
+RUN install-php-extensions gd xdebug
 
 # Install Bun (JavaScript/TypeScript runtime)
 RUN curl -fsSL https://bun.sh/install | bash
@@ -28,6 +30,7 @@ RUN a2enmod rewrite
 
 # Copy custom Apache configuration file
 COPY demo.apache.conf /etc/apache2/sites-available/000-default.conf
+COPY docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/
 
 # Set working directory
 WORKDIR /var/www/html
